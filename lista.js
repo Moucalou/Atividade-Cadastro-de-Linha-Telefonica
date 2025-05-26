@@ -34,17 +34,39 @@ function adicionarContato() {
     const tabelaContatos = document.getElementById("tabela_contatos")
     tabelaContatos.appendChild(novaLinha);
 
-    localStorage.setItem("tabela_contatos", JSON.stringify(tabelaContatos));
-    const listaContatos = JSON.parse(localStorage.getItem("NovoContato"));
+    const contatosSalvos = JSON.parse(localStorage.getItem("contatos")) || [];
+    contatosSalvos.push(novoContato);
+    localStorage.setItem("contatos", JSON.stringify(contatosSalvos));
+    const listaContatos = JSON.parse(localStorage.getItem("tabelaContatos"));
 }
 
-
-
+function carregarContatosSalvos() {
+    const contatos = JSON.parse(localStorage.getItem("contatos")) || [];
+    const tabelaContatos = document.getElementById("tabela_contatos");
+  
+    contatos.forEach((contato) => {
+      const novaLinha = document.createElement("tr");
+      const colunaNome = document.createElement("td");
+      const colunaNum1 = document.createElement("td");
+      const colunaNum2 = document.createElement("td");
+  
+      colunaNome.innerText = contato.nome;
+      colunaNum1.innerText = contato.num1;
+      colunaNum2.innerText = contato.num2;
+  
+      novaLinha.appendChild(colunaNome);
+      novaLinha.appendChild(colunaNum1);
+      novaLinha.appendChild(colunaNum2);
+  
+      tabelaContatos.appendChild(novaLinha);
+    });
+  }
 
 function configurarEventos() {
     console.log("Página carregada");
     const botaoContato = document.getElementById("adicionar_contato");
     botaoContato.addEventListener("click", adicionarContato);
+    carregarContatosSalvos();
 }
 
 window.addEventListener("load", configurarEventos);
